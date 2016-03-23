@@ -1,5 +1,3 @@
-using System.Linq;
-
 namespace Bowling
 {
     public class Game
