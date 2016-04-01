@@ -2,45 +2,93 @@ namespace Bowling
 {
     public class Game
     {
+        private const int MaxFrames = 10;
+
+        private Frame[] _frames;
+
+        private int _firstExtraRoll;
+        private int _secondExtraRoll;
+
         public int CalculateScore(int[] rolls)
         {
+            ParseRollsIntoFrames(rolls);
+
             var score = 0;
-            for (var roll = 0; roll < rolls.Length; roll += 2)
+            for (var frameIndex = 0; frameIndex < MaxFrames; frameIndex++)
             {
-                var frameScore = rolls[roll] + rolls[roll + 1];
-                var additionalScore = 0;
+                var frame = _frames[frameIndex];
+                var frameScore = frame.Score;
 
-                if (IsStrike(rolls, roll) && !IsExtraRoll(roll + 2))
+                if (frame.IsStrike)
                 {
-                    additionalScore = rolls[roll + 2] + rolls[roll + 3];
-                    if (IsStrike(rolls, roll + 2) && !IsExtraRoll(roll + 2))
-                        additionalScore += rolls[roll + 4];
+                    if (IsLastFrameInGame(frameIndex))
+                    {
+                        frameScore += _firstExtraRoll + _secondExtraRoll;
+                    }
+                    else
+                    {
+                        frameScore += _frames[frameIndex + 1].Score;
+
+                        if (IsNextFrameAStrike(frameIndex))
+                        {
+                            if (IsSecondToLastFrameInGame(frameIndex))
+                            {
+                                frameScore += _firstExtraRoll;
+                            }
+                            else
+                            {
+                                frameScore += _frames[frameIndex + 2].FirstRollScore;
+                            }
+                        }
+                    }
                 }
 
-                if (IsSpare(rolls, roll))
+                if (frame.IsSpare)
                 {
-                    additionalScore = rolls[roll + 2];
+                    frameScore += IsLastFrameInGame(frameIndex)
+                        ? _firstExtraRoll
+                        : _frames[frameIndex + 1].FirstRollScore;
                 }
 
-                score += frameScore + additionalScore;
+                score += frameScore;
             }
 
             return score;
         }
 
-        private static bool IsSpare(int[] rolls, int roll)
+        private bool IsNextFrameAStrike(int frameIndex)
         {
-            return !IsStrike(rolls, roll) && (rolls[roll] + rolls[roll + 1]) == 10;
+            return _frames[frameIndex + 1].IsStrike;
         }
 
-        private static bool IsStrike(int[] rolls, int roll)
+        private static bool IsSecondToLastFrameInGame(int frameIndex)
         {
-            return !IsExtraRoll(roll) && rolls[roll] == 10;
+            return frameIndex == MaxFrames - 2;
         }
 
-        private static bool IsExtraRoll(int roll)
+        private static bool IsLastFrameInGame(int frameIndex)
         {
-            return roll > 19;
+            return frameIndex == MaxFrames - 1;
+        }
+
+        private void ParseRollsIntoFrames(int[] rolls)
+        {
+            _frames = new Frame[MaxFrames];
+
+            var frame = 0;
+            for (var roll = 0; roll < rolls.Length && frame < 10; roll += 2)
+            {
+                _frames[frame] = new Frame
+                {
+                    FirstRollScore = rolls[roll],
+                    SecondRollScore = rolls[roll + 1]
+                };
+                frame++;
+            }
+
+            if (rolls.Length > 20) _firstExtraRoll = rolls[20];
+
+            if (rolls.Length > 21) _secondExtraRoll = rolls[21];
         }
     }
 }
