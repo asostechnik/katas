@@ -21,6 +21,9 @@ namespace RomanNumerals.UnitTests
         [TestCase(14, "XIV")]
         [TestCase(39, "XXXIX")]
         [TestCase(40, "XL")]
+        [TestCase(41, "XLI")]
+        [TestCase(50, "L")]
+        [TestCase(1999, "MCMXCIX")]
         public void Convert_Arabic_Number_To_Roman_Numeral(int arabicNumber, string expectedRomanNumeral)
         {
             var romanNumeral = RomanNumeralConverter.Convert(arabicNumber);
