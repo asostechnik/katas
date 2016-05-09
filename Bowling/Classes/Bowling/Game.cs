@@ -2,6 +2,23 @@ using System.Linq;
 
 namespace Bowling
 {
+    public class Frame
+    {
+        private readonly int _firstRoll;
+        private int _secondRoll;
+
+        public Frame(int firstRoll, int secondRoll)
+        {
+            _firstRoll = firstRoll;
+            _secondRoll = secondRoll;
+        }
+
+        public bool IsStrike()
+        {
+            return _firstRoll == 10;
+        }
+    }
+
     public class Game
     {
         private int[] _rolls;
@@ -14,9 +31,11 @@ namespace Bowling
 
             for (var roll = 0; roll < _rolls.Length; roll += 2)
             {
+                var frame = new Frame(rolls[roll], rolls[roll+1]);
+
                 var additionalScore = 0;
 
-                if (IsStrike(roll) && !IsExtraRoll(roll + 2))
+                if (frame.IsStrike() && !IsExtraRoll(roll + 2))
                 {
                     additionalScore = FrameScore(roll, 2);
 
