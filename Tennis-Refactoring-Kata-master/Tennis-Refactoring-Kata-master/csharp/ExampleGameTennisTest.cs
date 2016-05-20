@@ -23,14 +23,14 @@ namespace Tennis
         [Test]
         public void CheckGame1()
         {
-            var game = new TennisGame1("player1", "player2");
+            var game = new TennisGame1();
             RealisticTennisGame(game);
         }
 
         [Test]
         public void CheckGame2()
         {
-            var game = new TennisGame2("player1", "player2");
+            var game = new TennisGame2();
             RealisticTennisGame(game);
         }
 

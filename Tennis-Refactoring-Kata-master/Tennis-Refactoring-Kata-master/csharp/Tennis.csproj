@@ -62,6 +62,7 @@
     <Compile Include="ExampleGameTennisTest.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="TennisScore.cs" />
     <Compile Include="TennisTest.cs" />
     <Compile Include="TennisGame1.cs" />
     <Compile Include="TennisGame2.cs" />

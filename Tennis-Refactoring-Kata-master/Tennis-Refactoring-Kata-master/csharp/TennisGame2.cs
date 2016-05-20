@@ -1,57 +1,64 @@
+using System;
+
 namespace Tennis
 {
     public class TennisGame2 : ITennisGame
     {
-        public int Player2Score;
-        public int Player1Score;
+        private const string Player1 = "player1";
+        private const string Player2 = "player2";
 
-        public string Player1Result = "";
-        public string Player2Result = "";
+        private int _player2Score;
+        private int _player1Score;
 
-        private string _player1Name;
-        private string _player2Name;
-
-        public TennisGame2(string player1Name, string player2Name)
-        {
-            _player1Name = player1Name;
-            _player2Name = player2Name;
-        }
+        private string _player1Result = "";
+        private string _player2Result = "";
 
         public string GetScore()
         {
-            if (Player1Score == Player2Score && Player1Score < 3)
+            if (_player1Score == _player2Score)
             {
-                return $"{ConvertScoreToText(Player1Score)}-All";
+                return ConvertEqualScore();
             }
 
-            if (Player1Score == Player2Score && Player1Score > 2)
-                return "Deuce";
-
-            var winningPlayer = Player1Score > Player2Score 
-                ? "player1" 
-                : "player2";
-
-            if (Player1Score >= 4 && Player2Score >= 0 && Player1Score - Player2Score >= 2 ||
-                Player2Score >= 4 && Player1Score >= 0 && Player2Score - Player1Score >= 2)
+            if (_player1Score >= 4 || _player2Score >= 4)
             {
-                return "Win for " + winningPlayer;
+                return ConvertWinningScore();
             }
 
-            if (Player1Score > Player2Score && Player2Score >= 3 || 
-                Player2Score > Player1Score && Player1Score >= 3)
-            {
-                return "Advantage " + winningPlayer;
-            }
-
-            Player1Result = ConvertScoreToText(Player1Score);
-            Player2Result = ConvertScoreToText(Player2Score); ;
-
-            return Player1Result + "-" + Player2Result;
+            return SetResultsAndConvertToScore();
         }
 
-        private static string ConvertScoreToText(int scoreToConvert)
+        private string ConvertWinningScore()
         {
-            switch (scoreToConvert)
+            var winningPlayer = _player1Score > _player2Score
+                ? Player1
+                : Player2;
+
+            var scoreDifference = Math.Abs(_player1Score - _player2Score);
+
+            return scoreDifference == 1 
+                ? "Advantage " + winningPlayer 
+                : "Win for " + winningPlayer;
+        }
+
+        private string SetResultsAndConvertToScore()
+        {
+            _player1Result = ConvertScoreToText(_player1Score);
+            _player2Result = ConvertScoreToText(_player2Score);
+
+            return $"{_player1Result}-{_player2Result}";
+        }
+
+        private string ConvertEqualScore()
+        {
+            return _player1Score < 3 
+                ? $"{ConvertScoreToText(_player1Score)}-All" 
+                : "Deuce";
+        }
+
+        private static string ConvertScoreToText(int score)
+        {
+            switch (score)
             {
                 case 0:
                     return "Love";
@@ -68,24 +75,24 @@ namespace Tennis
 
         public void WonPoint(string player)
         {
-            if (player == "player1")
+            if (player == Player1)
             {
-                Player1Score++;
+                _player1Score++;
             }
             else
             {
-                Player2Score++;
+                _player2Score++;
             }
         }
 
         public void SetP1Score(int number)
         {
-            Player1Score += number;
+            _player1Score += number;
         }
 
         public void SetP2Score(int number)
         {
-            Player2Score += number;
+            _player2Score += number;
         }
     }
 }

@@ -76,37 +76,37 @@ namespace Tennis
         [Test]
         public void CheckTennisGame1()
         {
-            var game = new TennisGame1(Player1Name, Player2Name);
+            var game = new TennisGame1();
             CheckAllScores(game);
         }
 
         [Test]
         public void CheckTennisGame2()
         {
-            var game = new TennisGame2(Player1Name, Player2Name);
+            var game = new TennisGame2();
             CheckAllScores(game);
         }
 
         [Test]
         public void TennisGame2ShouldAddScoreForPlayer1()
         {
-            var game = new TennisGame2(Player1Name, Player2Name);
+            var game = new TennisGame2();
 
             game.SetP1Score(1);
             game.SetP1Score(1);
 
-            Assert.That(game.Player1Score, Is.EqualTo(2));
+            Assert.That(game.GetScore(), Is.EqualTo("Thirty-Love"));
         }
 
         [Test]
         public void TennisGame2ShouldAddScoreForPlayer2()
         {
-            var game = new TennisGame2(Player1Name, Player2Name);
+            var game = new TennisGame2();
 
             game.SetP2Score(1);
             game.SetP2Score(1);
 
-            Assert.That(game.Player2Score, Is.EqualTo(2));
+            Assert.That(game.GetScore(), Is.EqualTo("Love-Thirty"));
         }
 
         [Test]
