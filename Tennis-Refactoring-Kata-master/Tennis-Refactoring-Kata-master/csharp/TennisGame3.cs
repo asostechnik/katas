@@ -6,6 +6,7 @@ namespace Tennis
         private int _player2Score;
         private readonly string _player1Name;
         private readonly string _player2Name;
+        private readonly string[] _scoreNames = {"Love", "Fifteen", "Thirty", "Forty"};
 
         public TennisGame3(string player1Name, string player2Name)
         {
@@ -15,25 +16,33 @@ namespace Tennis
 
         public string GetScore()
         {
-            if (_player1Score < 4 && _player2Score < 4 && (_player1Score + _player2Score < 6))
-            {
-                string[] scoreNames = { "Love", "Fifteen", "Thirty", "Forty" };
+            var bothScoresAreLessThanFour = _player1Score < 4 && _player2Score < 4;
+            var theSumOfBothScoresIsLessThanSix = _player1Score + _player2Score < 6;
 
-                return _player1Score == _player2Score
-                    ? $"{scoreNames[_player1Score]}-All"
-                    : $"{scoreNames[_player1Score]}-{scoreNames[_player2Score]}";
+            if (bothScoresAreLessThanFour && theSumOfBothScoresIsLessThanSix)
+            {
+                return ConvertScore();
             }
 
-            if (_player1Score == _player2Score)
-            {
-                return "Deuce";
-            }
+            return _player1Score == _player2Score 
+                ? "Deuce" 
+                : ConvertWinningScore();
+        }
 
+        private string ConvertScore()
+        {
+            return _player1Score == _player2Score
+                ? $"{_scoreNames[_player1Score]}-All"
+                : $"{_scoreNames[_player1Score]}-{_scoreNames[_player2Score]}";
+        }
+
+        private string ConvertWinningScore()
+        {
             var winningPlayer = _player1Score > _player2Score
                 ? _player1Name
                 : _player2Name;
 
-            return (_player1Score - _player2Score) * (_player1Score - _player2Score) == 1
+            return (_player1Score - _player2Score)*(_player1Score - _player2Score) == 1
                 ? "Advantage " + winningPlayer
                 : "Win for " + winningPlayer;
         }
