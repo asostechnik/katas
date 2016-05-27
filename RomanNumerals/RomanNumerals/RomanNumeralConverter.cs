@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace RomanNumerals
 {
@@ -7,7 +8,19 @@ namespace RomanNumerals
     {
         private static readonly Dictionary<int, string> RomanNumerals = new Dictionary<int, string>()
         {
-            { 1, "I" }, {4, "IV"}, { 5, "V" }, {9, "IX"}, { 10, "X" }, { 40, "XL" }
+            {1, "I"},
+            {4, "IV"},
+            {5, "V"},
+            {9, "IX"},
+            {10, "X"},
+            {40, "XL"},
+            {50, "L"},
+            {90, "XC"},
+            {100, "C"},
+            {400, "CD"},
+            {500, "D"},
+            {900, "CM"},
+            {1000, "M"}
         };
 
         public static string Convert(int arabicNumber)
@@ -15,22 +28,15 @@ namespace RomanNumerals
             if (RomanNumerals.ContainsKey(arabicNumber))
                 return RomanNumerals[arabicNumber];
 
-            if (arabicNumber > 50)
+            foreach (var romanNumeral in RomanNumerals.Reverse())
             {
-                return "L" + Convert(arabicNumber - 50);
+                if (arabicNumber > romanNumeral.Key)
+                {
+                    return romanNumeral.Value + Convert(arabicNumber - romanNumeral.Key);
+                }
             }
 
-            if (arabicNumber > 10)
-            {
-                return "X" + Convert(arabicNumber - 10);
-            }
-
-            if (arabicNumber > 5)
-            {
-                return "V" + Convert(arabicNumber - 5);
-            }
-
-            return new string('I', arabicNumber);
+            return null;
         }
     }
 }
