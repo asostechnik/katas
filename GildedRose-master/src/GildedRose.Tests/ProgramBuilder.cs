@@ -3,19 +3,19 @@ using GildedRose.Console;
 
 namespace GildedRose.Tests
 {
-    public class TestProgramBuilder : ITestProgramBuilder, ITestProgramBuilderWithNewItem
+    public class ProgramBuilder : ITestProgramBuilder, ITestProgramBuilderWithNewItem
     {
         private readonly Program _programToBuild;
         private Item _itemToBuild;
 
-        private TestProgramBuilder()
+        private ProgramBuilder()
         {
             _programToBuild = new Program();
         }
 
-        public static ITestProgramBuilder Create()
+        public static ITestProgramBuilder CreateProgram()
         {
-            return new TestProgramBuilder();
+            return new ProgramBuilder();
         }
 
         public ITestProgramBuilderWithNewItem WithNewItem(string itemName)
