@@ -47,36 +47,24 @@ namespace GildedRose.Console
 
                 if (item.Name != agedBrie && item.Name != backstagePassesToATafkal80EtcConcert)
                 {
-                    if (item.Quality > 0)
-                    {
-                        item.Quality = item.Quality - 1;
-                    }
+                    DecrementItemQualityIfGreaterThanZero(item);
                 }
                 else
                 {
-                    if (item.Quality < 50)
-                    {
-                        item.Quality = item.Quality + 1;
+                    IncrementItemQualityIfLessThanFifty(item);
 
-                        if (item.Name == backstagePassesToATafkal80EtcConcert)
+                    if (item.Name == backstagePassesToATafkal80EtcConcert)
                         {
                             if (item.SellIn < 11)
                             {
-                                if (item.Quality < 50)
-                                {
-                                    item.Quality = item.Quality + 1;
-                                }
+                                IncrementItemQualityIfLessThanFifty(item);
                             }
 
                             if (item.SellIn < 6)
                             {
-                                if (item.Quality < 50)
-                                {
-                                    item.Quality = item.Quality + 1;
-                                }
+                                IncrementItemQualityIfLessThanFifty(item);
                             }
                         }
-                    }
                 }
 
                 item.SellIn = item.SellIn - 1;
@@ -87,24 +75,30 @@ namespace GildedRose.Console
                     {
                         if (item.Name != backstagePassesToATafkal80EtcConcert)
                         {
-                            if (item.Quality > 0)
-                            {
-                                item.Quality = item.Quality - 1;
-                            }
+                            DecrementItemQualityIfGreaterThanZero(item);
                         }
                         else
                         {
                             item.Quality = item.Quality - item.Quality;
                         }
                     }
-                    else
-                    {
-                        if (item.Quality < 50)
-                        {
-                            item.Quality = item.Quality + 1;
-                        }
-                    }
                 }
+            }
+        }
+
+        private static void IncrementItemQualityIfLessThanFifty(Item item)
+        {
+            if (item.Quality < 50)
+            {
+                item.Quality = item.Quality + 1;
+            }
+        }
+
+        private static void DecrementItemQualityIfGreaterThanZero(Item item)
+        {
+            if (item.Quality > 0)
+            {
+                item.Quality = item.Quality - 1;
             }
         }
 

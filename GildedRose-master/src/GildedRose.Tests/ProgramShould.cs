@@ -244,6 +244,23 @@ namespace GildedRose.Tests
                 program.Items.Single().SellIn.Should().Be(oneDay);
             }
 
+            //[Fact]
+            //public void Reduce_quality_of_conjured_items_by_two()
+            //{
+            //    const int oneDay = 1;
+            //    const int initialQualityOfTwo = 2;
+            //    const int reducedByTwo = 0;
+
+            //    var program = ProgramBuilder
+            //        .CreateProgram()
+            //        .WithNewItem(ConjuredItem)
+            //        .ToSellIn(oneDay)
+            //        .WithQuality(initialQualityOfTwo)
+            //        .Build();
+
+            //    QualityOfTheFirstItemIn(program).Should().Be(reducedByTwo);
+            //}
+
             private static int QualityOfTheFirstItemIn(Program program)
             {
                 return program.Items.First().Quality;
