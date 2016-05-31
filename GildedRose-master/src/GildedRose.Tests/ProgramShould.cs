@@ -12,8 +12,8 @@ namespace GildedRose.Tests
         public class ProgramShould
         {
             private const string StandardItem = "Standard Item";
-            private const string ConstantMaturingItem = "Aged Brie";
-            public const string SteppedMaturingItem = "Backstage passes to a TAFKAL80ETC concert";
+            private const string ConstantInverseAgingItem = "Aged Brie";
+            public const string SteppedInverseAgingItem = "Backstage passes to a TAFKAL80ETC concert";
             private const string LegendaryItem = "Sulfuras, Hand of Ragnaros";
             private const string ConjuredItem = "Conjured Item";
 
@@ -85,18 +85,20 @@ namespace GildedRose.Tests
                 QualityOfTheFirstItemIn(program).Should().BeGreaterOrEqualTo(zeroQuality);
             }
 
-            [Fact]
+            [Theory]
+            [InlineData(1)]
+            [InlineData(0)]
+            [InlineData(-1)]
 
-            public void Increase_quality_for_an_item_with_inverse_aging_rules()
+            public void Increase_quality_for_an_item_with_constant_inverse_aging_rules(int numberOfDaysToSellIn)
             {
-                const int oneDay = 1;
                 const int initialQuality = 1;
                 const int increasedByOne = initialQuality + 1;
 
                 var program = ProgramBuilder
                     .CreateProgram()
-                    .WithNewItem(ConstantMaturingItem)
-                    .ToSellIn(oneDay)
+                    .WithNewItem(ConstantInverseAgingItem)
+                    .ToSellIn(numberOfDaysToSellIn)
                     .WithQuality(initialQuality)
                     .Build();
 
@@ -114,7 +116,7 @@ namespace GildedRose.Tests
 
                 var program = ProgramBuilder
                     .CreateProgram()
-                    .WithNewItem(SteppedMaturingItem)
+                    .WithNewItem(SteppedInverseAgingItem)
                     .ToSellIn(moreThanTenDays)
                     .WithQuality(initialQuality)
                     .Build();
@@ -137,7 +139,7 @@ namespace GildedRose.Tests
 
                 var program = ProgramBuilder
                     .CreateProgram()
-                    .WithNewItem(SteppedMaturingItem)
+                    .WithNewItem(SteppedInverseAgingItem)
                     .ToSellIn(sixToTenDays)
                     .WithQuality(initialQuality)
                     .Build();
@@ -160,7 +162,7 @@ namespace GildedRose.Tests
 
                 var program = ProgramBuilder
                     .CreateProgram()
-                    .WithNewItem(SteppedMaturingItem)
+                    .WithNewItem(SteppedInverseAgingItem)
                     .ToSellIn(oneToFiveDays)
                     .WithQuality(initialQuality)
                     .Build();
@@ -180,7 +182,7 @@ namespace GildedRose.Tests
 
                 var program = ProgramBuilder
                     .CreateProgram()
-                    .WithNewItem(SteppedMaturingItem)
+                    .WithNewItem(SteppedInverseAgingItem)
                     .ToSellIn(zeroOrLessDays)
                     .WithQuality(initialQuality)
                     .Build();
@@ -198,7 +200,7 @@ namespace GildedRose.Tests
 
                 var program = ProgramBuilder
                     .CreateProgram()
-                    .WithNewItem(ConstantMaturingItem)
+                    .WithNewItem(ConstantInverseAgingItem)
                     .ToSellIn(oneDay)
                     .WithQuality(maximumQuality)
                     .Build();

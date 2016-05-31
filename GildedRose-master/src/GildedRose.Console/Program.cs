@@ -4,6 +4,9 @@ namespace GildedRose.Console
 {
     public class Program
     {
+        private const string BackstagePassesToATafkal80EtcConcert = "Backstage passes to a TAFKAL80ETC concert";
+        private const string AgedBrie = "Aged Brie";
+
         public IList<Item> Items;
 
         private static void Main()
@@ -39,66 +42,75 @@ namespace GildedRose.Console
         {
             foreach (var item in Items)
             {
-                const string agedBrie = "Aged Brie";
-                const string backstagePassesToATafkal80EtcConcert = "Backstage passes to a TAFKAL80ETC concert";
-
                 if (IsLegendary(item))
                     continue;
 
-                if (item.Name != agedBrie && item.Name != backstagePassesToATafkal80EtcConcert)
+                if (IsInverseAging(item))
                 {
-                    DecrementItemQualityIfGreaterThanZero(item);
+                    UpdateConstantInverseAgingItemQuality(item);
+                }
+                else if (IsSteppedInverseAging(item))
+                {
+                    UpdateSteppedInverseAgingItemQuality(item);
                 }
                 else
                 {
-                    IncrementItemQualityIfLessThanFifty(item);
-
-                    if (item.Name == backstagePassesToATafkal80EtcConcert)
-                        {
-                            if (item.SellIn < 11)
-                            {
-                                IncrementItemQualityIfLessThanFifty(item);
-                            }
-
-                            if (item.SellIn < 6)
-                            {
-                                IncrementItemQualityIfLessThanFifty(item);
-                            }
-                        }
+                    UpdateStandardItemQuality(item);
                 }
 
-                item.SellIn = item.SellIn - 1;
-
-                if (item.SellIn < 0)
-                {
-                    if (item.Name != agedBrie)
-                    {
-                        if (item.Name != backstagePassesToATafkal80EtcConcert)
-                        {
-                            DecrementItemQualityIfGreaterThanZero(item);
-                        }
-                        else
-                        {
-                            item.Quality = item.Quality - item.Quality;
-                        }
-                    }
-                }
+                item.SellIn--;
             }
         }
 
-        private static void IncrementItemQualityIfLessThanFifty(Item item)
+        private static bool IsSteppedInverseAging(Item item)
+        {
+            return item.Name == BackstagePassesToATafkal80EtcConcert;
+        }
+
+        private static bool IsInverseAging(Item item)
+        {
+            return item.Name == AgedBrie;
+        }
+
+        private static void UpdateSteppedInverseAgingItemQuality(Item item)
+        {
+            if (item.SellIn <= 0)
+            {
+                item.Quality = 0;
+                return;
+            }
+
+            UpdateConstantInverseAgingItemQuality(item);
+
+            if (item.SellIn < 11)
+            {
+                UpdateConstantInverseAgingItemQuality(item);
+            }
+
+            if (item.SellIn < 6)
+            {
+                UpdateConstantInverseAgingItemQuality(item);
+            }
+        }
+
+        private static void UpdateConstantInverseAgingItemQuality(Item item)
         {
             if (item.Quality < 50)
             {
-                item.Quality = item.Quality + 1;
+                item.Quality++;
             }
         }
 
-        private static void DecrementItemQualityIfGreaterThanZero(Item item)
+        private static void UpdateStandardItemQuality(Item item)
         {
             if (item.Quality > 0)
             {
-                item.Quality = item.Quality - 1;
+                item.Quality--;
+            }
+
+            if (item.Quality > 0 && item.SellIn <= 0)
+            {
+                item.Quality--;
             }
         }
 
