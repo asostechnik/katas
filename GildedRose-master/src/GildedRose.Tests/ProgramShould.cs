@@ -15,6 +15,7 @@ namespace GildedRose.Tests
             private const string ConstantMaturingItem = "Aged Brie";
             public const string SteppedMaturingItem = "Backstage passes to a TAFKAL80ETC concert";
             private const string LegendaryItem = "Sulfuras, Hand of Ragnaros";
+            private const string ConjuredItem = "Conjured Item";
 
             [Fact]
             public void Calculate_quality_even_if_there_are_no_items()
