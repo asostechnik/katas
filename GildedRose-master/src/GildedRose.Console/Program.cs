@@ -4,9 +4,6 @@ namespace GildedRose.Console
 {
     public class Program
     {
-        private const string BackstagePassesToATafkal80EtcConcert = "Backstage passes to a TAFKAL80ETC concert";
-        private const string AgedBrie = "Aged Brie";
-
         public IList<Item> Items;
 
         private static void Main()
@@ -16,19 +13,19 @@ namespace GildedRose.Console
             var app = new Program()
             {
                 Items = new List<Item>
-                                          {
-                                              new Item {Name = "+5 Dexterity Vest", SellIn = 10, Quality = 20},
-                                              new Item {Name = "Aged Brie", SellIn = 2, Quality = 0},
-                                              new Item {Name = "Elixir of the Mongoose", SellIn = 5, Quality = 7},
-                                              new Item {Name = "Sulfuras, Hand of Ragnaros", SellIn = 0, Quality = 80},
-                                              new Item
-                                                  {
-                                                      Name = "Backstage passes to a TAFKAL80ETC concert",
-                                                      SellIn = 15,
-                                                      Quality = 20
-                                                  },
-                                              new Item {Name = "Conjured Mana Cake", SellIn = 3, Quality = 6}
-                                          }
+                {
+                    new Item {Name = "+5 Dexterity Vest", SellIn = 10, Quality = 20},
+                    new Item {Name = "Aged Brie", SellIn = 2, Quality = 0},
+                    new Item {Name = "Elixir of the Mongoose", SellIn = 5, Quality = 7},
+                    new Item {Name = "Sulfuras, Hand of Ragnaros", SellIn = 0, Quality = 80},
+                    new Item
+                    {
+                        Name = "Backstage passes to a TAFKAL80ETC concert",
+                        SellIn = 15,
+                        Quality = 20
+                    },
+                    new Item {Name = "Conjured Mana Cake", SellIn = 3, Quality = 6}
+                }
 
             };
 
@@ -45,55 +42,71 @@ namespace GildedRose.Console
                 if (IsLegendary(item))
                     continue;
 
+                item.SellIn--;
+
                 if (IsInverseAging(item))
                 {
-                    UpdateConstantInverseAgingItemQuality(item);
-                }
-                else if (IsSteppedInverseAging(item))
-                {
-                    UpdateSteppedInverseAgingItemQuality(item);
-                }
-                else
-                {
-                    UpdateStandardItemQuality(item);
+                    IncrementItemQuality(item);
+                    continue;
                 }
 
-                item.SellIn--;
+                if (IsSteppedInverseAging(item))
+                {
+                    UpdateSteppedInverseAgingItemQuality(item);
+                    continue;
+                }
+
+                UpdateStandardItemQuality(item);
             }
         }
 
-        private static bool IsSteppedInverseAging(Item item)
+        private static bool IsLegendary(Item item)
         {
-            return item.Name == BackstagePassesToATafkal80EtcConcert;
+            return item.Name == "Sulfuras, Hand of Ragnaros";
         }
 
         private static bool IsInverseAging(Item item)
         {
-            return item.Name == AgedBrie;
+            return item.Name == "Aged Brie";
+        }
+
+        private static bool IsSteppedInverseAging(Item item)
+        {
+            return item.Name == "Backstage passes to a TAFKAL80ETC concert";
+        }
+
+        private static void UpdateStandardItemQuality(Item item)
+        {
+            DecrementItemQuality(item);
+
+            if (HasExpired(item))
+            {
+                DecrementItemQuality(item);
+            }
         }
 
         private static void UpdateSteppedInverseAgingItemQuality(Item item)
         {
-            if (item.SellIn <= 0)
+            if (HasExpired(item))
             {
                 item.Quality = 0;
                 return;
             }
 
-            UpdateConstantInverseAgingItemQuality(item);
+            IncrementItemQuality(item);
 
-            if (item.SellIn < 11)
+            if (item.SellIn < 10)
             {
-                UpdateConstantInverseAgingItemQuality(item);
+                IncrementItemQuality(item);
             }
 
-            if (item.SellIn < 6)
+            if (item.SellIn < 5)
             {
-                UpdateConstantInverseAgingItemQuality(item);
+                IncrementItemQuality(item);
             }
         }
 
-        private static void UpdateConstantInverseAgingItemQuality(Item item)
+        private static void IncrementItemQuality(Item item)
         {
             if (item.Quality < 50)
             {
@@ -101,24 +114,17 @@ namespace GildedRose.Console
             }
         }
 
-        private static void UpdateStandardItemQuality(Item item)
+        private static void DecrementItemQuality(Item item)
         {
             if (item.Quality > 0)
             {
                 item.Quality--;
             }
-
-            if (item.Quality > 0 && item.SellIn <= 0)
-            {
-                item.Quality--;
-            }
         }
 
-        private static bool IsLegendary(Item item)
+        private static bool HasExpired(Item item)
         {
-            const string sulfurasHandOfRagnaros = "Sulfuras, Hand of Ragnaros";
-
-            return item.Name == sulfurasHandOfRagnaros;
+            return item.SellIn < 0;
         }
     }
 }
