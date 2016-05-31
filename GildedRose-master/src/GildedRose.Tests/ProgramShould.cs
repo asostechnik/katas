@@ -246,22 +246,43 @@ namespace GildedRose.Tests
                 program.Items.Single().SellIn.Should().Be(oneDay);
             }
 
-            //[Fact]
-            //public void Reduce_quality_of_conjured_items_by_two()
-            //{
-            //    const int oneDay = 1;
-            //    const int initialQualityOfTwo = 2;
-            //    const int reducedByTwo = 0;
+            [Fact]
+            public void Reduce_quality_of_conjured_items_by_two_before_expiry()
+            {
+                const int oneDay = 1;
+                const int initialQualityOfTwo = 2;
+                const int reducedByTwo = initialQualityOfTwo - 2;
 
-            //    var program = ProgramBuilder
-            //        .CreateProgram()
-            //        .WithNewItem(ConjuredItem)
-            //        .ToSellIn(oneDay)
-            //        .WithQuality(initialQualityOfTwo)
-            //        .Build();
+                var program = ProgramBuilder
+                    .CreateProgram()
+                    .WithNewItem(ConjuredItem)
+                    .ToSellIn(oneDay)
+                    .WithQuality(initialQualityOfTwo)
+                    .Build();
 
-            //    QualityOfTheFirstItemIn(program).Should().Be(reducedByTwo);
-            //}
+                program.UpdateQuality();
+
+                QualityOfTheFirstItemIn(program).Should().Be(reducedByTwo);
+            }
+
+            [Fact]
+            public void Reduce_quality_of_conjured_items_by_four_after_expiry()
+            {
+                const int oneDay = 0;
+                const int initialQualityOfFour = 4;
+                const int reducedByFour = initialQualityOfFour - 4;
+
+                var program = ProgramBuilder
+                    .CreateProgram()
+                    .WithNewItem(ConjuredItem)
+                    .ToSellIn(oneDay)
+                    .WithQuality(initialQualityOfFour)
+                    .Build();
+
+                program.UpdateQuality();
+
+                QualityOfTheFirstItemIn(program).Should().Be(reducedByFour);
+            }
 
             private static int QualityOfTheFirstItemIn(Program program)
             {

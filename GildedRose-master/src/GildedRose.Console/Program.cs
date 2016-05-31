@@ -56,8 +56,19 @@ namespace GildedRose.Console
                     continue;
                 }
 
+                if (IsConjuredItem(item))
+                {
+                    UpdateConjuredItemQuality(item);
+                    continue;
+                }
+
                 UpdateStandardItemQuality(item);
             }
+        }
+
+        private static bool IsConjuredItem(Item item)
+        {
+            return item.Name.StartsWith("Conjured");
         }
 
         private static bool IsLegendary(Item item)
@@ -77,12 +88,9 @@ namespace GildedRose.Console
 
         private static void UpdateStandardItemQuality(Item item)
         {
-            DecrementItemQuality(item);
+            var amount = HasExpired(item) ? 2 : 1;
 
-            if (HasExpired(item))
-            {
-                DecrementItemQuality(item);
-            }
+            DecrementItemQuality(item, amount);
         }
 
         private static void UpdateSteppedInverseAgingItemQuality(Item item)
@@ -93,33 +101,41 @@ namespace GildedRose.Console
                 return;
             }
 
-            IncrementItemQuality(item);
+            var amount = 1;
+            if (item.SellIn < 10) amount++;
+            if (item.SellIn < 5) amount++;
 
-            if (item.SellIn < 10)
-            {
-                IncrementItemQuality(item);
-            }
+            IncrementItemQuality(item, amount);
+        }
 
-            if (item.SellIn < 5)
-            {
-                IncrementItemQuality(item);
-            }
+        private static void UpdateConjuredItemQuality(Item item)
+        {
+            var amount = HasExpired(item) ? 4 : 2;
+
+            DecrementItemQuality(item, amount);
         }
 
         private static void IncrementItemQuality(Item item)
         {
-            if (item.Quality < 50)
+            if (item.Quality < 50) item.Quality++;
+        }
+
+        private static void IncrementItemQuality(Item item, int amount)
+        {
+            for (var i = 0; i < amount; i++) IncrementItemQuality(item);
+        }
+
+        private static void DecrementItemQuality(Item item, int amount)
+        {
+            for (var i = 0; i < amount; i++)
             {
-                item.Quality++;
+                DecrementItemQuality(item);
             }
         }
 
         private static void DecrementItemQuality(Item item)
         {
-            if (item.Quality > 0)
-            {
-                item.Quality--;
-            }
+            if (item.Quality > 0) item.Quality--;
         }
 
         private static bool HasExpired(Item item)
