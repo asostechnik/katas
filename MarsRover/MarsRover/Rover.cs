@@ -54,15 +54,28 @@ namespace MarsRover
             string newLocation = "0 0";
             if (command == Command.Move)
             {
-                newLocation = Move(int.Parse(currentLocationX), int.Parse(currentLocationY));
+                if (heading == Heading.North)
+                {
+                    newLocation = MoveNorth(int.Parse(currentLocationX), int.Parse(currentLocationY));
+                }
+
+                if (heading == Heading.East)
+                {
+                    newLocation = MoveEast(int.Parse(currentLocationX), int.Parse(currentLocationY));
+                }
             }
 
             return newLocation + " " + heading.ToString().First();
         }
 
-        private static string Move(int currentLocationX, int currentLocationY)
+        private static string MoveNorth(int currentLocationX, int currentLocationY)
         {
-            return $"{currentLocationX} {currentLocationY+1}";
+            return $"{currentLocationX} {currentLocationY + 1}";
+        }
+
+        private static string MoveEast(int currentLocationX, int currentLocationY)
+        {
+            return $"{currentLocationX + 1} {currentLocationY}";
         }
 
         private static Heading SpinLeft(Heading orientation)
