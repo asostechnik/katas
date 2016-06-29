@@ -54,15 +54,15 @@ namespace MarsRover
             string newLocation = "0 0";
             if (command == Command.Move)
             {
-                newLocation = Move(currentLocationX, currentLocationY);
+                newLocation = Move(int.Parse(currentLocationX), int.Parse(currentLocationY));
             }
 
             return newLocation + " " + heading.ToString().First();
         }
 
-        private static string Move(string currentLocationX, string currentLocationY)
+        private static string Move(int currentLocationX, int currentLocationY)
         {
-            return "0 1";
+            return $"{currentLocationX} {currentLocationY+1}";
         }
 
         private static Heading SpinLeft(Heading orientation)

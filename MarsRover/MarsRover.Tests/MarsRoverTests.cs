@@ -16,6 +16,7 @@ namespace MarsRover.Tests
             [TestCase("R", "0 0 E")]
             [TestCase("", "0 0 N")]
             [TestCase("M", "0 1 N")]
+            [TestCase("MM", "0 2 N")]
             public void Move_to_position_specified_by_instructions(string instructions, string expectedPosition)
             {
                 var rover = new Rover();
