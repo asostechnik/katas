@@ -28,15 +28,18 @@ namespace MarsRover
             foreach (var instruction in instructions)
             {
                 var command = CommandMap[instruction];
-                position = ExecuteInstruction(position, command);
+                position = ExecuteCommand(position, command);
             }
 
             return position;
         }
 
-        private static string ExecuteInstruction(string position, Command command)
+        private static string ExecuteCommand(string position, Command command)
         {
-            var heading = HeadingMap[position.Last()];
+            var positionParts = position.Split(' ');
+            var currentLocationX = positionParts[0];
+            var currentLocationY = positionParts[1];
+            var heading = HeadingMap[positionParts[2].Single()];
 
             if (command == Command.Right)
             {
@@ -48,7 +51,18 @@ namespace MarsRover
                 heading = SpinLeft(heading);
             }
 
-            return "0 0 " + heading.ToString().First();
+            string newLocation = "0 0";
+            if (command == Command.Move)
+            {
+                newLocation = Move(currentLocationX, currentLocationY);
+            }
+
+            return newLocation + " " + heading.ToString().First();
+        }
+
+        private static string Move(string currentLocationX, string currentLocationY)
+        {
+            return "0 1";
         }
 
         private static Heading SpinLeft(Heading orientation)
@@ -73,7 +87,7 @@ namespace MarsRover
                 return Heading.North;
             }
 
-            throw new InvalidOperationException();
+            return Heading.NotSet;
         }
 
         private static Heading SpinRight(Heading orientation)

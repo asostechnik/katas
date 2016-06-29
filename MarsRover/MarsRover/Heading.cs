@@ -2,6 +2,7 @@
 {
     internal enum Heading
     {
+        NotSet,
         North,
         East,
         South,

@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using System;
+using FluentAssertions;
 using NUnit.Framework;
 
 namespace MarsRover.Tests
@@ -8,44 +9,20 @@ namespace MarsRover.Tests
         [TestFixture]
         public class RoverShould
         {
-            [Test]
-            public void Point_east_when_turned_right_from_north()
+            [TestCase("LLLL", "0 0 N")]
+            [TestCase("LLL", "0 0 E")]
+            [TestCase("LL", "0 0 S")]
+            [TestCase("L", "0 0 W")]
+            [TestCase("R", "0 0 E")]
+            [TestCase("", "0 0 N")]
+            [TestCase("M", "0 1 N")]
+            public void Move_to_position_specified_by_instructions(string instructions, string expectedPosition)
             {
                 var rover = new Rover();
 
-                var position = rover.ExecuteInstructions("R");
+                var position = rover.ExecuteInstructions(instructions);
 
-                position.Should().Be("0 0 E");
-            }
-
-            [Test]
-            public void Point_west_when_turned_left_from_north()
-            {
-                var rover = new Rover();
-
-                var position = rover.ExecuteInstructions("L");
-
-                position.Should().Be("0 0 W");
-            }
-
-            [Test]
-            public void Point_south_when_turned_left_twice_from_north()
-            {
-                var rover = new Rover();
-
-                var position = rover.ExecuteInstructions("LL");
-
-                position.Should().Be("0 0 S");
-            }
-
-            [Test]
-            public void Point_east_when_turned_left_thrice_from_north()
-            {
-                var rover = new Rover();
-
-                var position = rover.ExecuteInstructions("LLL");
-
-                position.Should().Be("0 0 E");
+                position.Should().Be(expectedPosition);
             }
         }
     }
