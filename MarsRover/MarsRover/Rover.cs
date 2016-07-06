@@ -22,9 +22,25 @@ namespace MarsRover
             {'W', Heading.West}
         };
 
+        private static readonly Dictionary<Heading, Heading> SpinLeftFrom = new Dictionary<Heading, Heading>()
+        {
+            {Heading.North, Heading.West},
+            {Heading.West, Heading.South},
+            {Heading.South, Heading.East},
+            {Heading.East, Heading.North},
+        };
+
+        private static readonly Dictionary<Heading, Heading> SpinRightFrom = new Dictionary<Heading, Heading>
+        {
+            {Heading.North, Heading.East},
+            {Heading.East, Heading.South},
+            {Heading.South, Heading.West},
+            {Heading.West, Heading.North}
+        };
+
         public string ExecuteInstructions(string instructions)
         {
-            var position = "0 0 N";
+            string position = "2 2"+" " +"N";
             foreach (var instruction in instructions)
             {
                 var command = CommandMap[instruction];
@@ -43,15 +59,15 @@ namespace MarsRover
 
             if (command == Command.Right)
             {
-                heading = SpinRight(heading);
+                heading = SpinRightFrom[heading];
             }
 
             if (command == Command.Left)
             {
-                heading = SpinLeft(heading);
+                heading = SpinLeftFrom[heading];
             }
 
-            string newLocation = "0 0";
+            string newLocation = "2 2";
             if (command == Command.Move)
             {
                 if (heading == Heading.North)
@@ -76,56 +92,6 @@ namespace MarsRover
         private static string MoveEast(int currentLocationX, int currentLocationY)
         {
             return $"{currentLocationX + 1} {currentLocationY}";
-        }
-
-        private static Heading SpinLeft(Heading orientation)
-        {
-            if (orientation == Heading.North)
-            {
-                return Heading.West;
-            }
-
-            if (orientation == Heading.West)
-            {
-                return Heading.South;
-            }
-
-            if (orientation == Heading.South)
-            {
-                return Heading.East;
-            }
-
-            if (orientation == Heading.East)
-            {
-                return Heading.North;
-            }
-
-            return Heading.NotSet;
-        }
-
-        private static Heading SpinRight(Heading orientation)
-        {
-            if (orientation == Heading.North)
-            {
-                return Heading.East;
-            }
-
-            if (orientation == Heading.East)
-            {
-                return Heading.South;
-            }
-
-            if (orientation == Heading.South)
-            {
-                return Heading.West;
-            }
-
-            if (orientation == Heading.West)
-            {
-                return Heading.North;
-            }
-
-            throw new InvalidOperationException();
         }
     }
 }

@@ -9,18 +9,18 @@ namespace MarsRover.Tests
         [TestFixture]
         public class RoverShould
         {
-            [TestCase("", "0 0 N")]
-            [TestCase("LLLL", "0 0 N")]
-            [TestCase("LLL", "0 0 E")]
-            [TestCase("LL", "0 0 S")]
-            [TestCase("L", "0 0 W")]
-            [TestCase("R", "0 0 E")]
-            [TestCase("RR", "0 0 S")]
-            [TestCase("RRR", "0 0 W")]
-            [TestCase("RRRR", "0 0 N")]
-            [TestCase("M", "0 1 N")]
-            [TestCase("MM", "0 2 N")]
-            [TestCase("RM", "1 0 E")]
+            [TestCase("", "2 2 N")]
+            [TestCase("LLLL", "2 2 N")]
+            [TestCase("LLL", "2 2 E")]
+            [TestCase("LL", "2 2 S")]
+            [TestCase("L", "2 2 W")]
+            [TestCase("R", "2 2 E")]
+            [TestCase("RR", "2 2 S")]
+            [TestCase("RRR", "2 2 W")]
+            [TestCase("RRRR", "2 2 N")]
+            [TestCase("M", "2 3 N")]
+            [TestCase("MM", "2 4 N")]
+            [TestCase("RM", "3 2 E")]
             public void Move_to_position_specified_by_instructions(string instructions, string expectedPosition)
             {
                 var rover = new Rover();
