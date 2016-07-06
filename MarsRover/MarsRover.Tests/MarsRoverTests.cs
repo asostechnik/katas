@@ -9,12 +9,15 @@ namespace MarsRover.Tests
         [TestFixture]
         public class RoverShould
         {
+            [TestCase("", "0 0 N")]
             [TestCase("LLLL", "0 0 N")]
             [TestCase("LLL", "0 0 E")]
             [TestCase("LL", "0 0 S")]
             [TestCase("L", "0 0 W")]
             [TestCase("R", "0 0 E")]
-            [TestCase("", "0 0 N")]
+            [TestCase("RR", "0 0 S")]
+            [TestCase("RRR", "0 0 W")]
+            [TestCase("RRRR", "0 0 N")]
             [TestCase("M", "0 1 N")]
             [TestCase("MM", "0 2 N")]
             [TestCase("RM", "1 0 E")]
