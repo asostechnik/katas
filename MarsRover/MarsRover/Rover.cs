@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace MarsRover
@@ -10,14 +11,6 @@ namespace MarsRover
             {'L', Command.Left},
             {'R', Command.Right},
             {'M', Command.Move}
-        };
-
-        private static readonly Dictionary<char, Heading> HeadingMap = new Dictionary<char, Heading>()
-        {
-            {'N', Heading.North},
-            {'E', Heading.East},
-            {'S', Heading.South},
-            {'W', Heading.West}
         };
 
         private static readonly Dictionary<Heading, Heading> SpinLeftFrom = new Dictionary<Heading, Heading>()
@@ -36,24 +29,21 @@ namespace MarsRover
             {Heading.West, Heading.North}
         };
 
-        public string ExecuteInstructions(string instructions, string startLocation = "2 2")
+        public string ExecuteInstructions(string instructions, string startPosition = "2 2 N")
         {
-            string position = startLocation+" " +"N";
             foreach (var instruction in instructions)
             {
                 var command = CommandMap[instruction];
-                position = ExecuteCommand(position, command, startLocation);
+                startPosition = ExecuteCommand(startPosition, command);
             }
 
-            return position;
+            return startPosition;
         }
 
-        private static string ExecuteCommand(string position, Command command, string startLocation)
+        private static string ExecuteCommand(string position, Command command)
         {
-            var positionParts = position.Split(' ');
-            var currentLocationX = positionParts[0];
-            var currentLocationY = positionParts[1];
-            var heading = HeadingMap[positionParts[2].Single()];
+            var parsedPosition = new Position(position);
+            var heading = parsedPosition.Heading;
 
             if (command == Command.Right)
             {
@@ -65,12 +55,21 @@ namespace MarsRover
                 heading = SpinLeftFrom[heading];
             }
 
+            var newLocation = position.Substring(0,3);
             if (command == Command.Move)
             {
-                startLocation = Move(heading, currentLocationX, currentLocationY);
+                newLocation = Move(position);
             }
 
-            return startLocation + " " + heading.ToString().First();
+            return newLocation + " " + heading.ToString().First();
+        }
+
+        private static string Move(string position)
+        {
+            var positionParts = position.Split(' ');
+            var heading = Position.HeadingMap[positionParts[2].Single()];
+
+            return Move(heading, positionParts[0], positionParts[1]);
         }
 
         private static string Move(Heading currentHeading, string currentLocationX, string currentLocationY)
@@ -96,5 +95,23 @@ namespace MarsRover
 
             return $"{newLocationX} {newLocationY}";
         }
+    }
+
+    internal class Position
+    {
+        public Position(string position)
+        {
+            this.Heading = HeadingMap[position[4]];
+        }
+
+        public Heading Heading { get; private set; }
+
+        public static readonly Dictionary<char, Heading> HeadingMap = new Dictionary<char, Heading>()
+        {
+            {'N', Heading.North},
+            {'E', Heading.East},
+            {'S', Heading.South},
+            {'W', Heading.West}
+        };
     }
 }
