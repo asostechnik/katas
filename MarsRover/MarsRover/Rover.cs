@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace MarsRover
@@ -38,19 +36,19 @@ namespace MarsRover
             {Heading.West, Heading.North}
         };
 
-        public string ExecuteInstructions(string instructions)
+        public string ExecuteInstructions(string instructions, string startLocation = "2 2")
         {
-            string position = "2 2"+" " +"N";
+            string position = startLocation+" " +"N";
             foreach (var instruction in instructions)
             {
                 var command = CommandMap[instruction];
-                position = ExecuteCommand(position, command);
+                position = ExecuteCommand(position, command, startLocation);
             }
 
             return position;
         }
 
-        private static string ExecuteCommand(string position, Command command)
+        private static string ExecuteCommand(string position, Command command, string startLocation)
         {
             var positionParts = position.Split(' ');
             var currentLocationX = positionParts[0];
@@ -67,51 +65,36 @@ namespace MarsRover
                 heading = SpinLeftFrom[heading];
             }
 
-            string newLocation = "2 2";
             if (command == Command.Move)
             {
-                if (heading == Heading.North)
-                {
-                    newLocation = MoveNorth(int.Parse(currentLocationX), int.Parse(currentLocationY));
-                }
-
-                if (heading == Heading.East)
-                {
-                    newLocation = MoveEast(int.Parse(currentLocationX), int.Parse(currentLocationY));
-                }
-
-                if (heading == Heading.West)
-                {
-                    newLocation = MoveWest(int.Parse(currentLocationX), int.Parse(currentLocationY));
-                }
-
-                if (heading == Heading.South)
-                {
-                    newLocation = MoveSouth(int.Parse(currentLocationX), int.Parse(currentLocationY));
-                }
+                startLocation = Move(heading, currentLocationX, currentLocationY);
             }
 
-            return newLocation + " " + heading.ToString().First();
+            return startLocation + " " + heading.ToString().First();
         }
 
-        private static string MoveNorth(int currentLocationX, int currentLocationY)
+        private static string Move(Heading currentHeading, string currentLocationX, string currentLocationY)
         {
-            return $"{currentLocationX} {currentLocationY + 1}";
-        }
+            var newLocationX = int.Parse(currentLocationX);
+            var newLocationY = int.Parse(currentLocationY);
 
-        private static string MoveEast(int currentLocationX, int currentLocationY)
-        {
-            return $"{currentLocationX + 1} {currentLocationY}";
-        }
+            switch (currentHeading)
+            {
+                case Heading.North:
+                    newLocationY++;
+                    break;
+                case Heading.East:
+                    newLocationX++;
+                    break;
+                case Heading.West:
+                    newLocationX--;
+                    break;
+                case Heading.South:
+                    newLocationY--;
+                    break;
+            }
 
-        private static string MoveWest(int currentLocationX, int currentLocationY)
-        {
-            return $"{currentLocationX - 1} {currentLocationY}";
-        }
-
-        private static string MoveSouth(int currentLocationX, int currentLocationY)
-        {
-            return $"{currentLocationX} {currentLocationY - 1}";
+            return $"{newLocationX} {newLocationY}";
         }
     }
 }

@@ -10,6 +10,7 @@ namespace MarsRover.Tests
         public class RoverShould
         {
             [TestCase("", "2 2 N")]
+            [TestCase("", "1 1 N", "1 1")]
             [TestCase("LLLL", "2 2 N")]
             [TestCase("LLL", "2 2 E")]
             [TestCase("LL", "2 2 S")]
@@ -23,11 +24,11 @@ namespace MarsRover.Tests
             [TestCase("RM", "3 2 E")]
             [TestCase("LM", "1 2 W")]
             [TestCase("LLM", "2 1 S")]
-            public void Move_to_position_specified_by_instructions(string instructions, string expectedPosition)
+            public void Move_to_position_specified_by_instructions(string instructions, string expectedPosition, string startLocation = "2 2")
             {
                 var rover = new Rover();
 
-                var position = rover.ExecuteInstructions(instructions);
+                var position = rover.ExecuteInstructions(instructions, startLocation);
 
                 position.Should().Be(expectedPosition);
             }
