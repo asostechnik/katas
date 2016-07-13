@@ -21,6 +21,8 @@ namespace MarsRover.Tests
             [TestCase("M", "2 3 N")]
             [TestCase("MM", "2 4 N")]
             [TestCase("RM", "3 2 E")]
+            [TestCase("LM", "1 2 W")]
+            [TestCase("LLM", "2 1 S")]
             public void Move_to_position_specified_by_instructions(string instructions, string expectedPosition)
             {
                 var rover = new Rover();
