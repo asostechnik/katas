@@ -1,4 +1,6 @@
-﻿namespace BankOutsideIn
+﻿using System;
+
+namespace BankOutsideIn
 {
     public class Account
     {
@@ -11,18 +13,23 @@
 
         public void Deposit(uint amount, string date)
         {
-            var deposit = new Deposit();
+            var deposit = new Deposit(amount, date);
             _transactionStore.Add(deposit);
         }
 
         public void Withdraw(uint amount, string date)
         {
-            throw new System.NotImplementedException();
+            var withdrawal = new Withdrawal(amount, date);
+            _transactionStore.Add(withdrawal);
         }
 
         public void Print()
         {
-            throw new System.NotImplementedException();
+            var transations = _transactionStore.GetAll();
+/*
+            var statement = new Statement(transations);
+            Console.Write(statement);
+*/
         }
     }
 }
