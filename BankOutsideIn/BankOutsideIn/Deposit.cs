@@ -9,7 +9,9 @@ namespace BankOutsideIn
 
         public override string ToString()
         {
-            return $"{Date} || {Amount}.00 || || {Amount}.00";
+            return $"{Date} || {Amount}.00 || || ";
         }
+
+        public override int SignedAmount => (int)Amount;
     }
 }

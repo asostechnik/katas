@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System.Security.Cryptography.X509Certificates;
+using NUnit.Framework;
 using Moq;
 
 namespace BankOutsideIn.Tests
@@ -10,7 +11,7 @@ namespace BankOutsideIn.Tests
         public void Deposit()
         {
             var transactionStore = new Mock<TransactionStore>();
-            var account = new Account(transactionStore.Object);
+            var account = new Account(transactionStore.Object, It.IsAny<Printer>());
 
             const int depositAmount = 1;
             const string depositDate = "20-12-2016";
@@ -23,7 +24,7 @@ namespace BankOutsideIn.Tests
         public void Withdraw()
         {
             var transactionStore = new Mock<TransactionStore>();
-            var account = new Account(transactionStore.Object);
+            var account = new Account(transactionStore.Object, It.IsAny<Printer>());
 
             const int depositAmount = 1;
             const string depositDate = "20-12-2016";
@@ -36,12 +37,13 @@ namespace BankOutsideIn.Tests
         public void Print()
         {
             var transactionStore = new Mock<TransactionStore>();
-            var account = new Account(transactionStore.Object);
+            var printer = new Mock<Printer>();
+            var account = new Account(transactionStore.Object, printer.Object);
 
             account.Print();
 
             transactionStore.Verify(x => x.GetAll());
-
+            printer.Verify(x => x.Print(It.IsAny<Statement>()));
         }
     }
 }

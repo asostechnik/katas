@@ -21,9 +21,14 @@ namespace BankOutsideIn.Tests
         public void Format_Header_With_Rows()
         {
             var content = "date || credit || debit || balance" + Environment.NewLine +
+                          "14-01-2012 || || 2.00 || 8.00" + Environment.NewLine +
                           "10-01-2012 || 10.00 || || 10.00" + Environment.NewLine;
 
-            var statement = new Statement(new BankTransaction[] { new Deposit(10, "10-01-2012") });
+            var statement = new Statement(new BankTransaction[]
+            {
+                new Deposit(10, "10-01-2012"),
+                new Withdrawal(2, "14-01-2012")
+            });
 
             statement.ToString().Should().Be(content);
         }

@@ -8,5 +8,12 @@ namespace BankOutsideIn
             base(amount, date)
         {
         }
+
+        public override string ToString()
+        {
+            return $"{Date} || || {Amount}.00 || ";
+        }
+
+        public override int SignedAmount => -(int)Amount;
     }
 }

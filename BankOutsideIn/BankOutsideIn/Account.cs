@@ -5,10 +5,12 @@ namespace BankOutsideIn
     public class Account
     {
         private readonly TransactionStore _transactionStore;
+        private readonly Printer _printer;
 
-        public Account(TransactionStore transactionStore)
+        public Account(TransactionStore transactionStore, Printer printer)
         {
             _transactionStore = transactionStore;
+            _printer = printer;
         }
 
         public void Deposit(uint amount, string date)
@@ -25,11 +27,9 @@ namespace BankOutsideIn
 
         public void Print()
         {
-            var transations = _transactionStore.GetAll();
-/*
-            var statement = new Statement(transations);
-            Console.Write(statement);
-*/
+            var transactions = _transactionStore.GetAll();
+            var statement = new Statement(transactions);
+            _printer.Print(statement);
         }
     }
 }
